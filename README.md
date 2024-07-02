@@ -87,24 +87,46 @@ More information on the Pelican CLient can be found here: [https://docs.pelicanp
    ```
    [pelicanuser@pelicantrain20## pelican-client]$ ls
    pelican-7.9.2 pelican_Linux_x86_64.tar.gz
-   [pelicanuser@pelicantrain20## pelican-client]$ cd pelican-7.9.2
-   [pelicanuser@pelicantrain20## pelican-7.9.2]$ ls
+   [pelicanuser@pelicantrain20## pelican-client]$ ls pelican-7.9.2
    LICENSE pelican README.md
    ```
 
 ### Use the Pelican Client
 
-1. "Get" the test object from the OSDF
+1. Move into the directory with the `pelican` binary
+
+   ```
+   cd pelican-7.9.2
+   ```
+
+   or
+
+   ```
+   cd $HOME/training-origin/pelican-client/pelican-7.9.2
+   ```
+
+2. "Get" the test object from the OSDF
 
    ```
    ./pelican object get pelican://osg-htc.org/ospool/uc-shared/public/OSG-Staff/validation/test.txt downloaded-test.txt
    ```
 
-2. Check the file contents
+   The current directory should now contain the object `downloaded-test.txt`. 
 
    ```
    [pelicanuser@pelicantrain20## pelican-7.9.2]$ ls
    downloaded-test.txt LICENSE pelican README.md
+   ```
+
+3. Print out the file contents
+
+   ```
+   cat downloaded-test.txt
+   ```
+
+   You should see something like this:
+
+   ```
    [pelicanuser@pelicantrain20## pelican-7.9.2]$ cat downloaded-test.txt
    Hello, World!
    ```
@@ -314,7 +336,14 @@ To start, you will download your data directly from the Origin, bypassing the ca
    ./pelican object get pelican://osdf-itb.osg-htc.org/HTC24-pelicantrain20##/test.txt?directread ./directread-test.txt
    ```
 
-   You will need to change `pelicantrain20##` to the number used by your specific virtual machine, e.g., `pelicantrain2001`.
+   **You will need to change `pelicantrain20##` to the number used by your specific virtual machine, e.g., `pelicantrain2001`.**
+
+   > If you do not change `pelicantrain20##` to the appropriate number for your virtual machine, you will get an error like this:
+   > 
+   > ```
+   > ERROR[2024-07-02T13:29:40-05:00] Error while querying the Director: 404: No namespace found for path. Either it doesn't exist, or the Director is experiencing problems
+   > ```
+   >
 
 3. Check the contents of the downloaded object
 
