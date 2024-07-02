@@ -23,6 +23,12 @@ git clone https://github.com/PelicanPlatform/training-origin.git
 git checkout name-of-training-branch
 ```
 
+### Available training branches
+
+| Branch name | Added | Description |
+| --- | --- | --- |
+| [htc24-pelican-tutorial](https://github.com/PelicanPlatform/training-origin/tree/htc24-pelican-tutorial) | 2024-07-02 | Materials for the session ["Data in Flight - Delivering Data with Pelican Tutorial" of HTC24](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710) |
+
 ## More Information
 
 * Pelican Platform: [https://pelicanplatform.org/](https://pelicanplatform.org/)
