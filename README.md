@@ -1,6 +1,6 @@
 # HTC24 Pelican Tutorial
 
-This repository contains the materials that will be used during the [HTC24 Pelican Tutorial](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
+This repository contains the materials that will be used during the HTC24 session ["Data in Flight - Delivering Data with Pelican"](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
 
 The following instructions assume the computer you are using has Docker and the web host certificates for using https, and that you have permission to use the OSDF ITB data federation (`osdf-itb.osg-htc.org`).
 HTC24 tutorial participants will be given access to a virtual machine that satisfies these requirements.
@@ -19,13 +19,15 @@ This tutorial uses Pelican v7.9.2.
 
 > These instructions are for HTC24 participants only and will not work for other users.
 
+### Logging in
+
 You must have registered prior to the tutorial to be given access to a virtual machine for use during the tutorial.
 Separate instructions were emailed to participants who signed up in advance. 
 
 If you registered in advance, you can log in to your virtual machine with
 
 ```
-ssh <comanage-username>@pelicanbastion.chtc.wisc.edu
+ssh <comanage-username>@pelican-train.chtc.wisc.edu
 ```
 
 where the `<comanage-username>` can be found in your registration information.
@@ -33,25 +35,36 @@ You will be signed into a dedicated virtual machine for your use only.
 You should see something like
 
 ```
-[pelicanuser@pelicantrain20## ~]$
+[username@pelicantrain20## ~]$
 ```
 
 for your command prompt.
 
+> We recommend logging in using two separate windows at this time.
+> Later in the tutorial, you will be using one window to run the Pelican server and using the other window to transfer data from that server.
+
+### Clone the materials
+
+Download the materials of this repository by running the following command:
+
+```
+git clone -b htc24-pelican-tutorial https://github.com/PelicanPlatform/training-origin
+```
+
+We have provided some initial files/organization to make the following tutorial smoother.
 The rest of this document contains the commands that will be executed during the course of the tutorial.
 Explanations of what is being done and why are provided in the accompanying presentation.
 
 ## Using the Pelican Client to Transfer Data
 
-More information on the Pelican CLient can be found here: []().
+More information on the Pelican CLient can be found here: [https://docs.pelicanplatform.org/getting-started/accessing-data](https://docs.pelicanplatform.org/getting-started/accessing-data).
 
 ### Download and Extract the Pelican Client
 
-1. Create a directory for the client
+1. Move into the provided `pelican-client` directory
 
    ```
-   mkdir $HOME/pelican-client
-   cd $HOME/pelican-client
+   cd $HOME/training-origin/pelican-client
    ```
 
 2. Download the client tarball from the Pelican Platform 
@@ -103,33 +116,32 @@ This structure is not required in order to run your own Pelican Origin.
 
 ### Prepare the Origin Directories
 
-1. Copy the pre-generated files
+1. Move to the provided `pelican-origin` directory
 
    ```
-   cp -R /etc/pelican-origin $HOME/pelican-origin
-   cd $HOME/pelican-origin
+   cd $HOME/training-origin/pelican-origin
    ```
 
 2. Explore the pre-generated files
 
    ```
    [pelicanuser@pelicantrain20## pelican-origin]$ ls
-   config origin-data
+   config data
    [pelicanuser@pelicantrain20## pelican-origin]$ ls config/
    pelican.yaml
-   [pelicanuser@pelicantrain20## pelican-origin]$ ls origin-data/
+   [pelicanuser@pelicantrain20## pelican-origin]$ ls data/
    test.txt
-   [pelicanuser@pelicantrain20## pelican-origin]$ cat origin-data/test.txt
+   [pelicanuser@pelicantrain20## pelican-origin]$ cat data/test.txt
    Hello World, from HTC24!
    ```
 
 The files are organized as such:
 
 ```
-$HOME/pelican-origin
+$HOME/training-origin/pelican-origin
 ├── config
 │   ├── pelican.yaml
-└── origin-data
+└── data
     └── test.txt
 ```
 
@@ -140,7 +152,7 @@ To make it easier to restart the Origin and serve a specific namespace, we are g
 1. Move to the origin config directory
 
    ```
-   cd $HOME/pelican-origin/config
+   cd $HOME/training-origin/pelican-origin/config
    ```
 
 2. Generate the Issuer JWK files using a Pelican container
@@ -206,7 +218,7 @@ Pelican Platform recommends using their provided Docker containers to run any Pe
 1. Move to the `pelican-origin` directory
 
    ```
-   cd $HOME/pelican-origin
+   cd $HOME/training-origin/pelican-origin
    ```
 
    You should see the following contents:
@@ -214,12 +226,12 @@ Pelican Platform recommends using their provided Docker containers to run any Pe
    ```
    [pelicanuser@pelicantrain20## pelican-origin]$ ls -R
    .:
-   config  origin-data
+   config  data
 
    ./config:
    issuer.jwk  issuer-pub.jwks  pelican.yaml
 
-   ./origin-data:
+   ./data:
    test.txt
    ```
 
@@ -233,7 +245,7 @@ Pelican Platform recommends using their provided Docker containers to run any Pe
        -v /etc/hostcert.pem:/etc/hostcert.pem \
        -v /etc/hostkey.pem:/etc/hostkey.pem \
        -v $(pwd)/config/pelican.yaml:/etc/pelican/pelican.yaml \
-       -v $(pwd)/origin-data:/data \
+       -v $(pwd)/data:/data \
        hub.opensciencegrid.org/pelican_platform/origin:v7.9.2 \
        serve -p 8444
    ```
@@ -293,7 +305,7 @@ To start, you will download your data directly from the Origin, bypassing the ca
 1. Move to the Client directory
 
    ```
-   cd $HOME/pelican-client/pelican-7.9.2
+   cd $HOME/training-origin/pelican-client/pelican-7.9.2
    ```
 
 2. Get your object directly using the `?directread` option.
@@ -310,7 +322,7 @@ To start, you will download your data directly from the Origin, bypassing the ca
    cat directread-test.txt
    ```
 
-   The contents should match those of the file `$HOME/pelican-origin/origin-data/test.txt`.
+   The contents should match those of the file `$HOME/pelican-origin/data/test.txt`.
 
 ### Download Using the Caching System
 
@@ -338,17 +350,17 @@ Now you will explore how the caching system works.
    rm directread-test.txt cacheread-test.txt
    ```
 
-2. Move to the `origin-data` folder and rename the `test.txt` file
+2. Move to the `data` folder and rename the `test.txt` file
 
    ```
-   cd $HOME/pelican-origin/origin-data
+   cd $HOME/training-origin/pelican-origin/data
    mv test.txt renamed-test.txt
    ```
 
 3. Move back to the Client folder
 
    ```
-   cd $HOME/pelican-client/pelican-7.9.2
+   cd $HOME/training-origin/pelican-client/pelican-7.9.2
    ```
 
 4. Try to download the object directly
