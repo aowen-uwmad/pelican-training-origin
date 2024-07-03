@@ -25,24 +25,37 @@ This tutorial uses Pelican v7.9.2.
 You must have registered prior to the tutorial to be given access to a virtual machine for use during the tutorial.
 Separate instructions were emailed to participants who signed up in advance. 
 
-If you registered in advance, you can log in to your virtual machine with
+1. If you registered in advance, you can log in to your virtual machine with
 
-```
-ssh <comanage-username>@pelican-train.chtc.wisc.edu
-```
+   ```
+   ssh <comanage-username>@pelican-train.chtc.wisc.edu
+   ```
 
-where the `<comanage-username>` can be found in your registration information.
-You will be signed into a dedicated virtual machine for your use only.
-You should see something like
+   where the `<comanage-username>` can be found in your registration information.
 
-```
-[username@pelicantrain20## ~]$
-```
+2. You'll first be prompted to accept the host key for accessing the machine; enter "Yes".
 
-for your command prompt.
+3. You'll be prompted to login via a browser link - open the link to login through the institution you used when you registered.
 
-> We recommend logging in using two separate windows at this time.
-> Later in the tutorial, you will be using one window to run the Pelican server and using the other window to transfer data from that server.
+4. After logging in in the browser, hit enter in your terminal.
+
+5. You may again be prompted to accept a host key for accessing another machine; enter yes.
+
+6. You will now be signed into a dedicated virtual machine for your use only.
+   
+   You should see something like
+
+   ```
+   [trainee@pelicantrain20## ~]$
+   ```
+
+   for your command prompt.
+
+7. *Repeat steps 1-7 in another terminal window*. 
+   
+   (You probably won't be prompted to accept the host keys this time.)
+
+   > Later in the tutorial, you will be using one window to run the Pelican server and using the other window to transfer data from that server.
 
 ### Clone the materials
 
@@ -86,9 +99,9 @@ More information on the Pelican CLient can be found here: [https://docs.pelicanp
    This will create a directory `pelican-7.9.2`, which in turn contains the client binary.
 
    ```
-   [pelicanuser@pelicantrain20## pelican-client]$ ls
+   [trainee@pelicantrain20## pelican-client]$ ls
    pelican-7.9.2 pelican_Linux_x86_64.tar.gz
-   [pelicanuser@pelicantrain20## pelican-client]$ ls pelican-7.9.2
+   [trainee@pelicantrain20## pelican-client]$ ls pelican-7.9.2
    LICENSE pelican README.md
    ```
 
@@ -115,7 +128,7 @@ More information on the Pelican CLient can be found here: [https://docs.pelicanp
    The current directory should now contain the object `downloaded-test.txt`. 
 
    ```
-   [pelicanuser@pelicantrain20## pelican-7.9.2]$ ls
+   [trainee@pelicantrain20## pelican-7.9.2]$ ls
    downloaded-test.txt LICENSE pelican README.md
    ```
 
@@ -128,7 +141,7 @@ More information on the Pelican CLient can be found here: [https://docs.pelicanp
    You should see something like this:
 
    ```
-   [pelicanuser@pelicantrain20## pelican-7.9.2]$ cat downloaded-test.txt
+   [trainee@pelicantrain20## pelican-7.9.2]$ cat downloaded-test.txt
    Hello, World!
    ```
 
@@ -148,13 +161,13 @@ This structure is not required in order to run your own Pelican Origin.
 2. Explore the pre-generated files
 
    ```
-   [pelicanuser@pelicantrain20## pelican-origin]$ ls
-   config data
-   [pelicanuser@pelicantrain20## pelican-origin]$ ls config/
+   [trainee@pelicantrain20## pelican-origin]$ ls
+   config data start-origin.sh
+   [trainee@pelicantrain20## pelican-origin]$ ls config/
    pelican.yaml
-   [pelicanuser@pelicantrain20## pelican-origin]$ ls data/
+   [trainee@pelicantrain20## pelican-origin]$ ls data/
    test.txt
-   [pelicanuser@pelicantrain20## pelican-origin]$ cat data/test.txt
+   [trainee@pelicantrain20## pelican-origin]$ cat data/test.txt
    Hello World, from HTC24!
    ```
 
@@ -163,9 +176,10 @@ The files are organized as such:
 ```
 $HOME/training-origin/pelican-origin
 ├── config
-│   ├── pelican.yaml
-└── data
-    └── test.txt
+│   └── pelican.yaml
+├── data
+│   └── test.txt
+└── start-origin.sh
 ```
 
 ### Generate the Issuer JWK
@@ -178,21 +192,16 @@ To make it easier to restart the Origin and serve a specific namespace, we are g
    cd $HOME/training-origin/pelican-origin/config
    ```
 
-2. Generate the Issuer JWK files using a Pelican container
+2. Generate the Issuer JWK files using the Pelican binary
 
    ```
-   docker run --rm --entrypoint '' \
-       -v $(pwd):$(pwd) -w $(pwd) \
-       hub.opensciencegrid.org/pelican_platform/origin:v7.9.2 \
-       /pelican/pelican generate keygen
+   ../../pelican-client/pelican-7.9.2/pelican generate keygen
    ```
-
-   This command will pull a Pelican docker container (in this case, the `origin` one, but any should work), override the default entrypoint, and then generate the Issuer JWK files in the current directory.
 
 3. Confirm the Issuer JWK files were created
 
    ```
-   [pelicanuser@pelicantrain20## config]$ ls
+   [trainee@pelicantrain20## config]$ ls
    issuer.jwk issuer-pub.jwks pelican.yaml
    ```
 
@@ -247,9 +256,9 @@ Pelican Platform recommends using their provided Docker containers to run any Pe
    You should see the following contents:
 
    ```
-   [pelicanuser@pelicantrain20## pelican-origin]$ ls -R
+   [trainee@pelicantrain20## pelican-origin]$ ls -R
    .:
-   config  data
+   config  data  start-origin.sh
 
    ./config:
    issuer.jwk  issuer-pub.jwks  pelican.yaml
@@ -258,20 +267,13 @@ Pelican Platform recommends using their provided Docker containers to run any Pe
    test.txt
    ```
 
-2. Start the Docker container, and ***leave it running***
+2. Start the Docker container by executing the `start-origin.sh` script, which contains the Docker run command (and some checks that you are in the right location).
 
    ```
-   docker run --rm -it \
-       -p 8444:8444 -p 8443:8443 \
-       -v $(pwd)/config/issuer.jwk:/etc/pelican/issuer.jwk \
-       -v $(pwd)/config/issuer-pub.jwks:/etc/pelican/issuer-pub.jwks \
-       -v /etc/hostcert.pem:/etc/hostcert.pem \
-       -v /etc/hostkey.pem:/etc/hostkey.pem \
-       -v $(pwd)/config/pelican.yaml:/etc/pelican/pelican.yaml \
-       -v $(pwd)/data:/data \
-       hub.opensciencegrid.org/pelican_platform/origin:v7.9.2 \
-       serve -p 8444
+   ./start-origin.sh
    ```
+
+3. **Leave the Docker container running in this window!**
 
 ### Initialize the Web Interface
 
