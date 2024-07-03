@@ -1,7 +1,8 @@
 # HTC24 Pelican Tutorial
 
 This repository contains the materials that will be used during the HTC24 session ["Data in Flight - Delivering Data with Pelican"](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
-Accompanying presentation is [here](https://docs.google.com/presentation/d/1gTVVIRMumyQxYg2sSxYo0JPSdG_AE-lzBMm5aoGLGrI/edit?usp=sharing).
+
+Accompanying slides: [go.wisc.edu/19xe2e](go.wisc.edu/19xe2e)
 
 The following instructions assume the computer you are using has Docker and the web host certificates for using https, and that you have permission to use the OSDF ITB data federation (`osdf-itb.osg-htc.org`).
 HTC24 tutorial participants will be given access to a virtual machine that satisfies these requirements.
