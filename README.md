@@ -1,11 +1,11 @@
-# HTC24 Pelican Tutorial
+# PEARC24 Pelican Tutorial
 
-This repository contains the materials that will be used during the HTC24 session ["Data in Flight - Delivering Data with Pelican"](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
+This repository contains the materials that will be used during the PEARC24 session ["Data in Flight - Delivering Data with Pelican"](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
 
-Accompanying slides: [go.wisc.edu/19xe2e](go.wisc.edu/19xe2e)
+Accompanying slides: [go.wisc.edu/19z0oe](go.wisc.edu/19z0oe)
 
 The following instructions assume the computer you are using has Docker and the web host certificates for using https, and that you have permission to use the OSDF ITB data federation (`osdf-itb.osg-htc.org`).
-HTC24 tutorial participants will be given access to a virtual machine that satisfies these requirements.
+PEARC24 tutorial participants will be given access to a virtual machine that satisfies these requirements.
 
 This tutorial uses Pelican v7.9.2.
 
@@ -19,7 +19,7 @@ This tutorial uses Pelican v7.9.2.
 
 ## Setup
 
-> These instructions are for HTC24 participants only and will not work for other users.
+> These instructions are for PEARC24 participants only and will not work for other users.
 
 ### Logging in
 
@@ -52,7 +52,7 @@ Separate instructions were emailed to participants who signed up in advance.
 
    for your command prompt.
 
-7. *Repeat steps 1-7 in another terminal window*. 
+7. *Repeat steps 1-6 in another terminal window*. 
    
    (You probably won't be prompted to accept the host keys this time.)
 
@@ -63,7 +63,7 @@ Separate instructions were emailed to participants who signed up in advance.
 Download the materials of this repository by running the following command:
 
 ```
-git clone -b htc24-pelican-tutorial https://github.com/PelicanPlatform/training-origin
+git clone -b pearc24-tutorial https://github.com/PelicanPlatform/training-origin
 ```
 
 We have provided some initial files/organization to make the following tutorial smoother.
@@ -169,7 +169,7 @@ This structure is not required in order to run your own Pelican Origin.
    [trainee@pelicantrain20## pelican-origin]$ ls data/
    test.txt
    [trainee@pelicantrain20## pelican-origin]$ cat data/test.txt
-   Hello World, from HTC24!
+   Hello World, from PEARC24!
    ```
 
 The files are organized as such:
@@ -212,7 +212,7 @@ Pelican uses a YAML file to provide the configuration for its services, typicall
 
 Each Origin has at least three unique entries in the configuration file: (i) the data federation URL it is joining, (ii) the "federation prefix" or "namespace" that it will serve in that data federation, and (iii) the hostname of the web host that is running the Origin.
 
-For this tutorial, your Origin will be joining the test instance of the OSDF and serving the namespace `/HTC24-<vm-name>` from the web host `<vm-name>.chtc.wisc.edu`.
+For this tutorial, your Origin will be joining the test instance of the OSDF and serving the namespace `/PEARC24-<vm-name>` from the web host `<vm-name>.chtc.wisc.edu`.
 We've provided most of the necessary configuration in the `pelican.yaml` file you copied above, including the federation URL for the OSDF test instance, but you will need to update the config with the name of your specific virtual machine.
 
 1. Update the config with the name of your virtual machine
@@ -227,9 +227,9 @@ We've provided most of the necessary configuration in the `pelican.yaml` file yo
 
    a. **Namespace**
 
-      *Before:* `    - FederationPrefix: "/HTC24-<vm-name>"`
+      *Before:* `    - FederationPrefix: "/PEARC24-<vm-name>"`
    
-      *After:* `    - FederationPrefix: "/HTC24-pelicantrain2001"`
+      *After:* `    - FederationPrefix: "/PEARC24-pelicantrain2001"`
     
    b. **Hostname**
 
@@ -324,9 +324,14 @@ If there aren't any red boxes web interface for your Origin, then you are ready 
 
 > If you accidentally stop the Origin service for some reason, return to the previous section ([Initialize and Serve Your Pelican Origin](#initialize-and-serve-your-pelican-origin)) and repeat the steps.
 
-### Download Directly From Your Origin
+### Download the Test Object From Your Origin
 
-To start, you will download your data directly from the Origin, bypassing the cache system that is used by default.
+By default, Pelican pulls objects through a caching system. 
+When a new object is fetched, the object will first be copied to a nearby cache before being downloaded to the client.
+Subsequent pulls of an object with the same Pelican URL will fetch the copy from the nearby cache.
+This can greatly reduce the load on the origin serving the object.
+
+After your Origin has been online for a few minutes, you can use the caching system to transfer the file, which is default mechanism of transfer.
 
 1. Move to the Client directory
 
@@ -334,10 +339,28 @@ To start, you will download your data directly from the Origin, bypassing the ca
    cd $HOME/training-origin/pelican-client/pelican-7.9.2
    ```
 
-2. Get your object directly using the `?directread` option.
+2. Get your object 
 
    ```
-   ./pelican object get pelican://osdf-itb.osg-htc.org/HTC24-pelicantrain20##/test.txt?directread ./directread-test.txt
+   ./pelican object get pelican://osdf-itb.osg-htc.org/PEARC24-pelicantrain20##/test.txt ./cacheread-test.txt
+   ```
+
+3. Check the contents of the downloaded object
+
+   ```
+   cat cacheread-test.txt
+   ```
+
+   The contents should match those of the file `$HOME/pelican-origin/data/test.txt`.
+
+### Download Directly From Your Origin
+
+Next, you will download your data directly from the Origin, bypassing the cache system that is used by default.
+
+1. Get your object directly using the `?directread` option.
+
+   ```
+   ./pelican object get pelican://osdf-itb.osg-htc.org/PEARC24-pelicantrain20##/test.txt?directread ./directread-test.txt
    ```
 
    **You will need to change `pelicantrain20##` to the number used by your specific virtual machine, e.g., `pelicantrain2001`.**
@@ -349,33 +372,15 @@ To start, you will download your data directly from the Origin, bypassing the ca
    > ```
    >
 
-3. Check the contents of the downloaded object
+2. Check the contents of the downloaded object
 
    ```
    cat directread-test.txt
    ```
 
-   The contents should match those of the file `$HOME/pelican-origin/data/test.txt`.
-
-### Download Using the Caching System
-
-After your Origin has been online for a few minutes, you can use the caching system to transfer the file, which is default mechanism of transfer.
-
-1. Get your object 
-
-   ```
-   ./pelican object get pelican://osdf-itb.osg-htc.org/HTC24-pelicantrain20##/test.txt ./cacheread-test.txt
-   ```
-
-2. Check the contents of the downloaded object
-
-   ```
-   cat cacheread-test.txt
-   ```
-
 ### Rename the Object in the Origin and Download Again
 
-Now you will explore how the caching system works.
+Now you will explore an important implication about how the caching system works.
 
 1. Remove the previously downloaded objects
 
@@ -399,7 +404,7 @@ Now you will explore how the caching system works.
 4. Try to download the object directly
 
    ```
-   ./pelican object get pelican://osdf-itb.osg-htc.org/HTC24-pelicantrain20##/test.txt?directread ./directread-test.txt
+   ./pelican object get pelican://osdf-itb.osg-htc.org/PEARC24-pelicantrain20##/test.txt?directread ./directread-test.txt
    ```
 
    This will FAIL! 
@@ -407,14 +412,14 @@ Now you will explore how the caching system works.
 5. Try to download the object using caching system (default)
 
    ```
-   ./pelican object get pelican://osdf-itb.osg-htc.org/HTC24-pelicantrain20##/test.txt ./cacheread-test.txt
+   ./pelican object get pelican://osdf-itb.osg-htc.org/PEARC24-pelicantrain20##/test.txt ./cacheread-test.txt
    ```
 
    This will SUCCEED!
 
-Because the object `/HTC24-pelicantrain20##/test.txt` had been previously transferred using the caching system, a copy of that object *was kept in a cache*.
+Because the object `/PEARC24-pelicantrain20##/test.txt` had been previously transferred using the caching system, a copy of that object *was kept in a cache*.
 By default, Pelican attempts to transfer objects from the nearest cache.
-So the default transfer attempt succeeded for `/HTC24-pelicantrain20##/test.txt` because the Client downloaded the object from a cache.
+So the default transfer attempt succeeded for `/PEARC24-pelicantrain20##/test.txt` because the Client downloaded the object from a cache.
 The attempt at downloading the object directly from the Origin failed, because that object no longer existed at the Origin.
 
 This behavior applies generally to any change to objects stored in the Origin.
