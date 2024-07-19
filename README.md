@@ -1,6 +1,6 @@
 # PEARC24 Pelican Tutorial
 
-This repository contains the materials that will be used during the PEARC24 session ["Data in Flight - Delivering Data with Pelican"](https://agenda.hep.wisc.edu/event/2175/sessions/3189/#20240710).
+This repository contains the materials that will be used during the PEARC24 session ["Data in Flight - Delivering Data with Pelican"](https://web.cvent.com/event/f318e73c-2230-432a-a044-b75625020543/websitePage:afd80266-008e-414b-9f94-2fd9b4dd1924?session=5dcb0b3d-1e72-4696-ad36-a3653eccf5f0&shareLink=true).
 
 Accompanying slides: [go.wisc.edu/19z0oe](go.wisc.edu/19z0oe)
 
