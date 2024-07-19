@@ -2,7 +2,7 @@
 
 This repository contains the materials that will be used during the PEARC24 session ["Data in Flight - Delivering Data with Pelican"](https://web.cvent.com/event/f318e73c-2230-432a-a044-b75625020543/websitePage:afd80266-008e-414b-9f94-2fd9b4dd1924?session=5dcb0b3d-1e72-4696-ad36-a3653eccf5f0&shareLink=true).
 
-Accompanying slides: [go.wisc.edu/19z0oe](go.wisc.edu/19z0oe)
+Accompanying slides: [go.wisc.edu/19z0oe](https://go.wisc.edu/19z0oe)
 
 The following instructions assume the computer you are using has Docker and the web host certificates for using https, and that you have permission to use the OSDF ITB data federation (`osdf-itb.osg-htc.org`).
 PEARC24 tutorial participants will be given access to a virtual machine that satisfies these requirements.
