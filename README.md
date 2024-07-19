@@ -294,7 +294,7 @@ To initialize, login at https://pelicantrain2001.chtc.wisc.edu:8444/view/initial
 
 2. Enter the one-time code to activate the interface
 
-3. [Optional] Provide an admin password. (If you do, and you close your browser, you will need to enter this password to login to the interface again.)
+3. Provide an admin password. (If you close your browser, you will need to enter this password to login to the interface again.)
 
 Some notes: 
 
